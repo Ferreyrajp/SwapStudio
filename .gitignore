@@ -1,0 +1,17 @@
+# entorno y datos generados por el instalador / la app
+.venv/
+models/
+outputs/
+work/
+third_party/
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# editores / sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
