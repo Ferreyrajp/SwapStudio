@@ -1,4 +1,6 @@
-# SwapStudio
+<p align="center"><img src="assets/icon-256.png" alt="SwapStudio" width="128"></p>
+
+<h1 align="center">SwapStudio</h1>
 
 **Character swap en video, 100 % local y sin ComfyUI.** Subes un video y una imagen de un
 personaje, y obtienes el mismo video con ese personaje en lugar de la persona original.

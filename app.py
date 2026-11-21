@@ -145,4 +145,24 @@ def build() -> gr.Blocks:
 
 
 if __name__ == "__main__":
-    build().queue().launch(inbrowser=True)
+    import argparse
+
+    ap = argparse.ArgumentParser(description="SwapStudio")
+    ap.add_argument("--port", type=int, default=None,
+                    help="Puerto. Por defecto 7860 o, si esta ocupado, el siguiente libre.")
+    ap.add_argument("--host", default="127.0.0.1",
+                    help="Direccion. Usa 0.0.0.0 para entrar desde otro equipo de la red.")
+    ap.add_argument("--no-browser", action="store_true", help="No abrir el navegador al iniciar.")
+    args = ap.parse_args()
+
+    try:
+        build().queue().launch(
+            server_name=args.host, server_port=args.port, inbrowser=not args.no_browser,
+            favicon_path=str(config.ROOT / "assets" / "icon-64.png"),
+        )
+    except OSError as e:
+        raise SystemExit(
+            f"No pude abrir el puerto {args.port or '7860-7959'}: {e}\n"
+            "Probablemente esta ocupado (quiza una copia anterior de la app sigue abierta). "
+            "Prueba con otro: run.bat --port 7870"
+        )
