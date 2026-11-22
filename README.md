@@ -4,7 +4,7 @@
 
 **Character swap en video, 100 % local y sin ComfyUI.** Subes un video y una imagen de un
 personaje, y obtienes el mismo video con ese personaje en lugar de la persona original.
-Interfaz web con Gradio, pensada para PCs modestas (probado en una RTX 5060 de 16 GB de VRAM
+Interfaz web con Gradio, pensada para PCs modestas (probado en una RTX 5060 Ti de 16 GB de VRAM
 con 32 GB de RAM).
 
 *English: local, standalone (no ComfyUI) video character replacement with Gradio, built around
@@ -13,11 +13,15 @@ Wan 2.2 Animate GGUF quantizations to run on 16 GB GPUs.*
 > **Motor: Wan 2.2 Animate (modo replacement)**, no MiniMax H3. El swap con H3 necesita el video
 > como referencia y hoy eso no es viable en una PC de 32 GB de RAM (ver [Por que no H3](#por-que-no-h3)).
 
+<p align="center">
+  <img src="docs/screenshots/ui-main.png" alt="Interfaz de SwapStudio: video original, personaje de reemplazo, resultado y registro" width="900">
+</p>
+
 ## Estado
 
 | | |
 |---|---|
-| Windows 11 + RTX 5060 16 GB + Python 3.13 | **Probado de punta a punta** |
+| Windows 11 + RTX 5060 Ti 16 GB + Python 3.13 | **Probado de punta a punta** |
 | Linux | No probado todavia (el codigo es multiplataforma por diseno; reportes bienvenidos) |
 | GPU con menos de 16 GB | No probado; ver las cuantizaciones mas chicas |
 
@@ -78,6 +82,37 @@ Sube un video con **una sola persona** y una imagen del personaje (cuerpo visibl
 puede), y pulsa *Generar swap*. El resultado queda en `outputs/`; los intermedios (pose, mascara,
 fondo) en `work/<fecha>/pre/`, utiles para diagnosticar resultados raros. Las vistas previas
 tienen boton de pantalla completa.
+
+### Capturas
+
+**Ajustes** (el panel se despliega bajo los botones): motor, resolucion, segundos, FPS, pasos,
+semilla, pesos, offload, parametros de la mascara y frames por bloque.
+
+<p align="center">
+  <img src="docs/screenshots/ui-settings.png" alt="Panel de ajustes de SwapStudio" width="900">
+</p>
+
+**Durante la generacion**: las barras de progreso cubren el resultado y el registro mientras se
+prepara el video, se preprocesa y se muestrea (cada paso queda anotado en el registro).
+
+<p align="center">
+  <img src="docs/screenshots/ui-generating.png" alt="SwapStudio generando un swap" width="900">
+</p>
+
+### Puerto y navegador
+
+La app escucha en `http://127.0.0.1:7860`; si ese puerto esta ocupado usa el siguiente libre
+(7861, 7862...) y lo imprime en la consola (`Running on local URL: ...`). Opciones:
+
+```bash
+run.bat --port 7870        # elegir puerto (si esta ocupado, avisa y no arranca)
+run.bat --no-browser       # no abrir el navegador; abre la URL a mano
+run.bat --host 0.0.0.0     # accesible desde otros equipos de tu red (sin contrasena: usalo solo en redes de confianza)
+```
+
+Si no abre, lo mas comun es que **una copia anterior siga corriendo** (tambien ocupa la VRAM).
+En Windows: `netstat -ano | findstr :7860` muestra el PID y `taskkill /PID <pid> /F` lo cierra;
+o cierra los `python.exe` del `.venv` desde el Administrador de tareas.
 
 ### Como elegir los ajustes en 16 GB
 
